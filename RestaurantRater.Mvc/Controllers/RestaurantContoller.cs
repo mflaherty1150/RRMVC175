@@ -18,6 +18,19 @@ public class RestaurantController : Controller
         return View(restaurants);
     }
 
+    [ActionName("Details")]
+    public async Task<IActionResult> Restaurant(int id)
+    {
+        var restaurantDetail = await _service.GetRestaurantByIdAsync(id);
+
+        if (restaurantDetail is null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        return View(restaurantDetail);
+    }
+
     public async Task<IActionResult> Create()
     {
         return View();
