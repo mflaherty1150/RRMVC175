@@ -9,7 +9,7 @@ public class RestaurantEntity
 
     [Required]
     [MaxLength(100)]
-    public string name { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
     [Required]
     [MaxLength(100)]

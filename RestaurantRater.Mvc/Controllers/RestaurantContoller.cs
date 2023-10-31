@@ -17,4 +17,22 @@ public class RestaurantController : Controller
         List<RestaurantListItem> restaurants = await _service.GetAllRestaurantsAsync();
         return View(restaurants);
     }
+
+    public async Task<IActionResult> Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(RestaurantCreate model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        await _service.CreateRestaurantAsync(model);
+
+        return RedirectToAction(nameof(Index));
+    }
 }

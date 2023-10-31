@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantRater.Data;
+using RestaurantRater.Data.Entities;
 using RestaurantRater.Models.Restaurant;
 
 namespace RestaurantRater.Services.Restaurant;
@@ -13,9 +14,17 @@ public class RestaurantService : IRestaurantService
         _context = context;
     }
 
-    public Task<bool> CreateRestaurantAsync(RestaurantCreate model)
+    public async Task<bool> CreateRestaurantAsync(RestaurantCreate model)
     {
-        throw new NotImplementedException();
+        var restaurant = new RestaurantEntity()
+        {
+            Name = model.Name,
+            Location = model.Location
+        };
+
+        _context.Restaurants.Add(restaurant);
+        var wasAdded = await _context.SaveChangesAsync() == 1;
+        return wasAdded;
     }
 
     public Task<bool> DeleteRestaurantAsync(int id)
@@ -30,7 +39,7 @@ public class RestaurantService : IRestaurantService
             .Select(r => new RestaurantListItem()
             {
                 Id = r.Id,
-                Name = r.name,
+                Name = r.Name,
                 Score = r.Score,
             }).ToListAsync();
 
