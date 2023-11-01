@@ -90,4 +90,24 @@ public class RestaurantController : Controller
 
         return View(ModelState);
     }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var restaurantDetail = await _service.GetRestaurantByIdAsync(id);
+
+        return View(restaurantDetail);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(RestaurantDetail model)
+    {
+        if (await _service.GetRestaurantByIdAsync(model.Id) is null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        var wasDeleted = _service.DeleteRestaurantAsync(model.Id);
+
+        return RedirectToAction(nameof(Index));
+    }
 }

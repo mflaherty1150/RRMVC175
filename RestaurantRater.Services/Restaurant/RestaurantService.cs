@@ -27,11 +27,6 @@ public class RestaurantService : IRestaurantService
         return wasAdded;
     }
 
-    public Task<bool> DeleteRestaurantAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<List<RestaurantListItem>> GetAllRestaurantsAsync()
     {
         List<RestaurantListItem> restaurants = await _context.Restaurants
@@ -77,4 +72,12 @@ public class RestaurantService : IRestaurantService
 
         return await _context.SaveChangesAsync() == 1;
     }
+     public async Task<bool> DeleteRestaurantAsync(int id)
+    {
+        var restaurantDelete = await _context.Restaurants.FindAsync(id);
+
+        _context.Restaurants.Remove(restaurantDelete!);
+        return await _context.SaveChangesAsync() == 1;
+    }
+
 }
