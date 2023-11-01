@@ -48,4 +48,46 @@ public class RestaurantController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var restaurantDetail = await _service.GetRestaurantByIdAsync(id);
+
+        if (restaurantDetail is null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        var restaurantEdit = new RestaurantEdit()
+        {
+            Id = restaurantDetail.Id,
+            Name = restaurantDetail.Name,
+            Location = restaurantDetail.Location
+        };
+
+        return View(restaurantEdit);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(RestaurantEdit model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(ModelState);
+        }
+
+        var restaurantDetail = _service.GetRestaurantByIdAsync(model.Id);
+
+        if (restaurantDetail is null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        if (await _service.UpdateRestaurantAsync(model))
+        {
+            return RedirectToAction("Details", new { id = model.Id});
+        }
+
+        return View(ModelState);
+    }
 }

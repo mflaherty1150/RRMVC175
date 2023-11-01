@@ -67,4 +67,14 @@ public class RestaurantService : IRestaurantService
 
         return restaurantDetail;
     }
+
+    public async Task<bool> UpdateRestaurantAsync(RestaurantEdit model)
+    {
+        var restaurantEdit = await _context.Restaurants.FindAsync(model.Id);
+
+        restaurantEdit.Name = model.Name;
+        restaurantEdit.Location = model.Location;
+
+        return await _context.SaveChangesAsync() == 1;
+    }
 }
